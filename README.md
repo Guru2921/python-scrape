@@ -16,6 +16,15 @@ Install dependencies
 ```
 pip install -r requirements.txt
 ```
+## Database setup
+
+```
+import bamboohr.sql to your database
+```
+
+## .env file setting
+
+Configure your database hosting settings
 
 ## Run 
 
