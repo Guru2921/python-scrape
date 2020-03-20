@@ -18,6 +18,8 @@ from dotenv import load_dotenv
 from os import environ
 # time
 import time
+# mail driver
+import maildriver
 
 def get_employment_type(endpoint):
 	if endpoint[0] == '/' and endpoint[1] == '/':
@@ -77,10 +79,13 @@ def save_jobs_to_mysql(jobs):
 					print(job['job_id'] + " has been updated!")
 				except Error as e:
 					print("Error while updating the table!", e)
+					maildriver.send_table_update_error()
 	except Error as e:
 		print("Error while connecting to MySQL", e)
+		maildriver.send_database_connection_error()
 	finally:
 		if (connection.is_connected()):
+			maildriver.send_job_run_alert()
 			cursor.close()
 			connection.close()
 			print("MySQL connection is closed")
@@ -92,7 +97,7 @@ def run():
 	soup = BeautifulSoup(webpage, 'lxml')
 	jobs_ = get_jobs(soup)
 	# print(jobs_)
-	save_jobs_to_mysql(jobs_)
+	# save_jobs_to_mysql(jobs_)
 	elapsed_time = time.time() - start_time
 	print("Elapsed Time: ", elapsed_time)
 	return jobs_
