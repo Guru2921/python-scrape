@@ -97,7 +97,7 @@ def run():
 	soup = BeautifulSoup(webpage, 'lxml')
 	jobs_ = get_jobs(soup)
 	# print(jobs_)
-	# save_jobs_to_mysql(jobs_)
+	save_jobs_to_mysql(jobs_)
 	elapsed_time = time.time() - start_time
 	print("Elapsed Time: ", elapsed_time)
 	return jobs_
