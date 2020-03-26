@@ -65,6 +65,10 @@ def save_jobs_to_mysql(jobs):
 											user=db_user,
 											password=db_password)
 		if connection.is_connected():
+			cursor = connection.cursor()
+			mySql_delete_query = """ DELETE from jobs"""
+			cursor.execute(mySql_delete_query)
+			print("Table Data Removed!")
 			for job in jobs:
 				try:
 					cursor = connection.cursor()
