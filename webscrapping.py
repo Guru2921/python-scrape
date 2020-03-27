@@ -54,6 +54,12 @@ def get_jobs(soup):
 		print(job_id + " has been parsed!")
 	return job_array
 
+def get_jobids_from_jobs(jobs):
+	ids = []
+	for job in jobs:
+		ids.append(job['job_id'])
+	return ids
+
 def save_jobs_to_mysql(jobs):
 	try:
 		db_host = environ.get("DB_HOST")
@@ -65,8 +71,11 @@ def save_jobs_to_mysql(jobs):
 											user=db_user,
 											password=db_password)
 		if connection.is_connected():
+			jids_array = get_jobids_from_jobs(jobs)
+			jids_str = ','.join(jids_array)
 			cursor = connection.cursor()
-			mySql_delete_query = """ DELETE from jobs"""
+			mySql_delete_query = "DELETE from `jobs` WHERE ID NOT IN (" + jids_str + ")"
+			# delete jobs which are not at the job lists
 			cursor.execute(mySql_delete_query)
 			print("Table Data Removed!")
 			for job in jobs:
@@ -78,7 +87,7 @@ def save_jobs_to_mysql(jobs):
 											ON DUPLICATE KEY UPDATE
 											job_title=%s,url=%s,location=%s,employment_type=%s
 											"""
-					cursor.execute(mySql_insert_query, (job['job_id'], job['job_location'], job['job_url'], job['job_location'], job['job_type'], job['job_location'], job['job_url'], job['job_location'], job['job_type']))
+					cursor.execute(mySql_insert_query, (job['job_id'], job['job_title'], job['job_url'], job['job_location'], job['job_type'], job['job_title'], job['job_url'], job['job_location'], job['job_type']))
 					connection.commit()
 					print(job['job_id'] + " has been updated!")
 				except Error as e:

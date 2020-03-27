@@ -39,7 +39,7 @@ def send_email(from_, to_, subject, context):
         del msg
         s.quit()
     except socket.error as e:
-        print("could not connect")
+        print("mailserver could not connect")
 
 def send_database_connection_error():
     subject = "Internal-Scheduled Job Error - DB connection error"
