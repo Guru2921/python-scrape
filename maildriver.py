@@ -91,6 +91,7 @@ def send_job_run_alert():
     send_email(environ.get("MAIL_FROM"), environ.get("MAIL_TO"), subject, context)
 
 if __name__ == '__main__':
+    print("maildriver executed!")
     load_dotenv('.env')
     send_database_connection_error()
     send_table_update_error()
